@@ -94,5 +94,42 @@ function viewAllRoles() {
     })
 }
 
+function viewAllEmployees() {
+    const dbEmployees = `SELECT first_name, last_name FROM employee`
+
+    db.query(dbEmployees, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            console.table(res);
+            startPrompt()
+        }
+    })
+}
+
+function addADepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "newDepartment",
+            message: "What is the name of the new Department",
+        }
+    ])
+    .then((response) => {
+        console.log(response.newDepartment)
+        // let dbDepartment = `INSERT INTO department SET ?", (dep_id, dep_name) VALUES (25, ${response.newDepartment})`;
+
+        db.query("INSERT INTO department SET ?", response.newDepartment, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                console.table(res);
+            }
+        })
+    })
+}
+
 
 startPrompt()
