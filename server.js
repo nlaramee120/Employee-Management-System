@@ -80,5 +80,19 @@ function viewAllDeps() {
     })
 }
 
+function viewAllRoles() {
+    const dbRoles = `SELECT title FROM roles`
+
+    db.query(dbRoles, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            console.table(res);
+            startPrompt()
+        }
+    })
+}
+
 
 startPrompt()
