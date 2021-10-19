@@ -4,19 +4,19 @@ USE employees_db;
 
 CREATE TABLE department (
     dep_id INT AUTO_INCREMENT PRIMARY KEY,
-    dep_name VARCHAR(30),
-)
+    dep_name VARCHAR(30)
+);
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
     salary DECIMAL,
-    department_id INT
+    department_id INT,
 
-    FOREIGN KEY (department)
+    FOREIGN KEY (department_id)
     REFERENCES department(dep_id)
     ON DELETE SET NULL
-)
+);
 
 CREATE TABLE employee (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,4 +33,4 @@ CREATE TABLE employee (
     FOREIGN KEY (manager_id)
     REFERENCES employee(id)
     ON DELETE SET NULL
-)
+);
