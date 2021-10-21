@@ -113,19 +113,83 @@ function addADepartment() {
         {
             type: "input",
             name: "newDepartment",
-            message: "What is the name of the new Department",
+            message: "What is the name of the new Department?",
         }
     ])
     .then((response) => {
         console.log(response.newDepartment)
-        // let dbDepartment = `INSERT INTO department SET ?", (dep_id, dep_name) VALUES (25, ${response.newDepartment})`;
+        let dbDepartment = response.newDepartment;
 
-        db.query("INSERT INTO department SET ?", response.newDepartment, (err, res) => {
+        db.query(`INSERT INTO department (dep_name) VALUES (?)`, [dbDepartment], (err, res) => {
             if (err) {
                 console.error(err)
             }
             else {
-                console.table(res);
+                viewAllDeps();
+            }
+        })
+    })
+};
+
+
+function addARole() {
+
+    let allDeps = []
+    const dbDeps = `SELECT dep_name FROM department` 
+
+    db.query(dbDeps, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            res.forEach((department) => {
+                allDeps.push(department.dep_name)
+            })
+            console.log(allDeps)
+        }
+    })
+
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "newRole",
+            message: "What is the name of the new role?",
+        },
+        {
+            type: "input",
+            name: "newSalary",
+            message: "How much does this position make?",
+        },
+        {
+            type: "list",
+            name: "placePosition",
+            message: "What department does this position belong to?",
+            choices: allDeps,
+        }
+    ])
+    .then((response) => {
+        let newRole = response.newRole;
+        let newSalary = response.newSalary;
+        let placePosition = response.placePosition;
+        var placePositionid;
+        
+        db.query(`SELECT dep_id FROM department WHERE dep_name = (?)`, [placePosition], (err, res) => {
+            console.log(placePosition)
+            if (err) {
+                console.log(err)
+            }
+            else {
+                placePositionid = res[0].dep_id
+            }
+            console.log(placePositionid)
+        })
+
+        db.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [newRole, newSalary, placePositionid], (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                viewAllRoles();
             }
         })
     })
