@@ -9,5 +9,5 @@ VALUES (001, "Sales Lead", 80000, 1), (002, "Salesperson", 50000, 1), (003, "Lea
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Nick", "Laramee", 003, 001), ("Joe", "Schmoe", 004, null), ("Fred", "Flint", 001, 002), 
-("John", "Doe", 002, null), ("Susie", "Q", 005, 003), ("Hors", "D'oeuvre", 006, null), ("Craig", "Smith", 007, 004), ("Anotha", "One", 008, null);
+VALUES ("Nick", "Laramee", 003, null), ("Joe", "Schmoe", 004, 001), ("Fred", "Flint", 001, null), 
+("John", "Doe", 002, 003), ("Susie", "Q", 005, null), ("Hors", "D'oeuvre", 006, 005), ("Craig", "Smith", 007, null), ("Anotha", "One", 008, 007);

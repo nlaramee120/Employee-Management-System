@@ -195,5 +195,116 @@ function addARole() {
     })
 }
 
+function addAnEmployee() {
+
+    let allRoles = []
+    const dbRoles = `SELECT title FROM roles` 
+
+    db.query(dbRoles, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            res.forEach((roles) => {
+                allRoles.push(roles.title)
+            })
+            console.log(allRoles)
+        }
+    })
+
+    let allManagers = []
+    const dbManagers = `SELECT first_name, last_name FROM employee WHERE manager_id is null` 
+
+    db.query(dbManagers, (err, res) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.forEach((employee) => {
+                allManagers.push(employee.first_name + " " + employee.last_name)
+            })
+            console.log(allManagers)
+        }
+    })
+
+    // let allDeps = []
+    // const dbDeps = `SELECT dep_name FROM department` 
+
+    // db.query(dbDeps, (err, res) => {
+    //     if (err) {
+    //         console.log("hello error")
+    //     }
+    //     else {
+    //         res.forEach((department) => {
+    //             allDeps.push(department.dep_name)
+    //         })
+    //         console.log(allDeps)
+    //     }
+    // })
+
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "newFirstName",
+            message: "What is the employee's first name?",
+        },
+        {
+            type: "input",
+            name: "newLastName",
+            message: "What is the employee's last name?",
+        },
+        {
+            type: "list",
+            name: "newRole",
+            message: "What is this employee's role?",
+            choices: allRoles
+        },
+        // {
+        //     type: "list",
+        //     name: "chosenDep",
+        //     message: "What department does this position belong to?",
+        //     choices: allDeps,
+        // },
+        {
+            type: "list",
+            name: "isManager",
+            message: "Who is this employee's manager?",
+            choices: allManagers
+        }
+    ])
+
+    .then((response) => {
+        let newFirstName = response.newFirstName;
+        let newLastName = response.newLastName;
+        let newRole = response.newRole;
+        let isManager = response.isManager;
+        var roleId;
+        var managerId;
+
+        let chosenManager = isManager.split(" ")
+
+        db.query(`SELECT id FROM roles WHERE title = (?)`, [newRole], (err, res) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                roleId = res[0].id
+            }
+        })
+
+        db.query(`SELECT id FROM employee WHERE first_name = (?) AND last_name = (?)`, [chosenManager[0], chosenManager[1]], (err, res) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                managerId = res[0].id
+            }
+        })
+        
+
+        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)` [newFirstName, newLastName, roleId, managerId])
+    })
+}
+
 
 startPrompt()
