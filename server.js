@@ -197,6 +197,13 @@ function addARole() {
 
 function addAnEmployee() {
 
+    var roleId;
+    var managerId;
+    var newFirstName;  
+    var newLastName;  
+    var newRole;
+    var isManager;
+
     let allRoles = []
     const dbRoles = `SELECT title FROM roles` 
 
@@ -225,20 +232,6 @@ function addAnEmployee() {
         }
     })
 
-    // let allDeps = []
-    // const dbDeps = `SELECT dep_name FROM department` 
-
-    // db.query(dbDeps, (err, res) => {
-    //     if (err) {
-    //         console.log("hello error")
-    //     }
-    //     else {
-    //         res.forEach((department) => {
-    //             allDeps.push(department.dep_name)
-    //         })
-    //         console.log(allDeps)
-    //     }
-    // })
 
     inquirer.prompt([
         {
@@ -257,12 +250,6 @@ function addAnEmployee() {
             message: "What is this employee's role?",
             choices: allRoles
         },
-        // {
-        //     type: "list",
-        //     name: "chosenDep",
-        //     message: "What department does this position belong to?",
-        //     choices: allDeps,
-        // },
         {
             type: "list",
             name: "isManager",
@@ -272,25 +259,20 @@ function addAnEmployee() {
     ])
 
     .then((response) => {
-        let newFirstName = response.newFirstName;
-        let newLastName = response.newLastName;
-        let newRole = response.newRole;
-        let isManager = response.isManager;
-        var roleId;
-        var managerId;
-        var containedRoleId;
-        var containedManagerId;
+         newFirstName = response.newFirstName;
+         newLastName = response.newLastName;
+         newRole = response.newRole;
+         isManager = response.isManager;
 
-        let chosenManager = isManager.split(" ")
+        var chosenManager = isManager.split(" ")
 
         db.query(`SELECT id FROM roles WHERE title = (?)`, [newRole], (err, res) => {
             if (err) {
                 console.log(err)
             }
             else {
-                var roleId = res[0].id
-                containedRoleId = roleId
-                console.log(containedRoleId)
+                roleId = res[0].id
+                console.log(roleId, "yooooo")
             }
         })
 
@@ -299,15 +281,16 @@ function addAnEmployee() {
                 console.log(err)
             }
             else {
-                var managerId = res[0].id
-                containedManagerId = managerId
-                console.log(containedManagerId);
+                managerId = res[0].id
+                console.log(managerId, "brooooo")
             }
         })
         
+        console.log(managerId)
+        console.log(roleId)
 
-        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)` [newFirstName, newLastName, containedRoleId, containedManagerId], (err, res) => {
-            console.log(containedManagerId, "-----")
+
+        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [newFirstName, newLastName, roleId, managerId], (err, res) => {
             if (err) {
                 console.log(err)
             }
@@ -318,6 +301,55 @@ function addAnEmployee() {
         })
     })
 }
+
+function updateEmpRole() {
+    let allEmps = []
+    const dbEmployees = `SELECT first_name, last_name FROM employee`
+
+    db.query(dbEmployees, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            res.forEach((employee) => {
+                allEmps.push(employee.first_name + " " + employee.last_name)
+            })
+            console.log(allEmps)
+        }
+    })
+
+    let allRoles = []
+    const dbRoles = `SELECT title FROM roles` 
+
+    db.query(dbRoles, (err, res) => {
+        if (err) {
+            console.log("hello error")
+        }
+        else {
+            res.forEach((roles) => {
+                allRoles.push(roles.title)
+            })
+        }
+    })
+
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "chooseEmp",
+            message: "Which Employee's role would you like to change?",
+            choices: allEmps,
+        },
+        {
+            type: "list",
+            name: "chooseRole",
+            message: "What will the employee's new role be?",
+            choices: allRoles,
+        },
+    ])
+
+
+}
+
 
 
 startPrompt()
