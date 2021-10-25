@@ -208,7 +208,6 @@ function addAnEmployee() {
             res.forEach((roles) => {
                 allRoles.push(roles.title)
             })
-            console.log(allRoles)
         }
     })
 
@@ -223,7 +222,6 @@ function addAnEmployee() {
             res.forEach((employee) => {
                 allManagers.push(employee.first_name + " " + employee.last_name)
             })
-            console.log(allManagers)
         }
     })
 
@@ -280,6 +278,8 @@ function addAnEmployee() {
         let isManager = response.isManager;
         var roleId;
         var managerId;
+        var containedRoleId;
+        var containedManagerId;
 
         let chosenManager = isManager.split(" ")
 
@@ -288,7 +288,9 @@ function addAnEmployee() {
                 console.log(err)
             }
             else {
-                roleId = res[0].id
+                var roleId = res[0].id
+                containedRoleId = roleId
+                console.log(containedRoleId)
             }
         })
 
@@ -297,12 +299,23 @@ function addAnEmployee() {
                 console.log(err)
             }
             else {
-                managerId = res[0].id
+                var managerId = res[0].id
+                containedManagerId = managerId
+                console.log(containedManagerId);
             }
         })
         
 
-        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)` [newFirstName, newLastName, roleId, managerId])
+        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)` [newFirstName, newLastName, containedRoleId, containedManagerId], (err, res) => {
+            console.log(containedManagerId, "-----")
+            if (err) {
+                console.log(err)
+            }
+            else {
+                console.table(res)
+                viewAllEmployees()
+            }
+        })
     })
 }
 
