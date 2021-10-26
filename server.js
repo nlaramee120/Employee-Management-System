@@ -330,7 +330,6 @@ async function updateEmpRole() {
                 allRoles.push(roles.title)
             })
         }
-    })
 
     inquirer.prompt([
         {
@@ -353,11 +352,30 @@ async function updateEmpRole() {
     ])
 
     .then((response) => {
-        chooseEmp = response.allEmps;
-        chooseRole = response.allRoles;
+        let empId;
+        let roleId;
+
+        res.forEach((roles) => {
+            if (response.chooseRole === roles.title) {
+                roleId = roles.id;
+            }
+        })
 
 
+        res.forEach((employee) => {
+            if(response.chooseEmp === employee.first_name + employee.last_name) {
+                empId === employee.id;
+            }
+        })
+
+        db.query(`UPDATE employee SET employee.role_id = ? WHERE employee.id = ?`, [roleId, empId], (err) => {
+            if (err) {
+                console.log(err)
+            }
+})
     })
+
+})
 
 }
 
