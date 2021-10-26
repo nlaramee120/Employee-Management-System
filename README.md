@@ -16,7 +16,7 @@
 - Perform an npm -install to allow dependencies to be installed. 
 - Answer the prompts to adjust to your specific team.
 ## Test Instructions
-- -insert video here-
+- <a href="https://watch.screencastify.com/v/8CupeVotdY5EEyIOQfzO">Video Walkthrough</a>
 ## License
 - MIT License
 - https://choosealicense.com/licenses/mit/
