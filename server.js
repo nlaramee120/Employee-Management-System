@@ -302,7 +302,7 @@ function addAnEmployee() {
     })
 }
 
-function updateEmpRole() {
+async function updateEmpRole() {
     let allEmps = []
     const dbEmployees = `SELECT first_name, last_name FROM employee`
 
@@ -334,6 +334,11 @@ function updateEmpRole() {
 
     inquirer.prompt([
         {
+            type: "confirm",
+            name: "stop",
+            message: "Are you sure you would like to update an employee's role?",
+        },
+        {
             type: "list",
             name: "chooseEmp",
             message: "Which Employee's role would you like to change?",
@@ -347,6 +352,12 @@ function updateEmpRole() {
         },
     ])
 
+    .then((response) => {
+        chooseEmp = response.allEmps;
+        chooseRole = response.allRoles;
+
+
+    })
 
 }
 
