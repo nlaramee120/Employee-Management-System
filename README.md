@@ -11,7 +11,10 @@
 ## Description
 - The purpose of this project is to allow a user to interact with a database to change specific data about a team of employees based off of their name, roles, salary, etc. The user with interact with the database through the command lind by answering simple prompts from inquirer.
 ## Installation
-- Git clone/fork from the Github repository. Open a terminal to access the command line. Perform an npm -install to allow dependencies to be installed. Answer the prompts to adjust to your specific team.
+- Git clone/fork from the Github repository. 
+- Open a terminal to access the command line. 
+- Perform an npm -install to allow dependencies to be installed. 
+- Answer the prompts to adjust to your specific team.
 ## Test Instructions
 - -insert video here-
 ## License
